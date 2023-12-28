@@ -1,0 +1,560 @@
+{
+	"info": {
+		"_postman_id": "08a9d914-817a-4b10-8d8d-da749176a05c",
+		"name": "Book Store API",
+		"description": "Welcome to the Book Store API! This API enables you to store, edit and share the details of any book. All of these operations are secured by a JWT token that is sent in the headers of every request (i.e the custom x-book-store-api header). So dive into these docs and have fun!",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26315637",
+		"_collection_link": "https://www.postman.com/galactic-spaceship-179581/workspace/eb-pearls-apis-testing/collection/26315637-08a9d914-817a-4b10-8d8d-da749176a05c?action=share&source=collection_link&creator=26315637"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Sign up.",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\": \"Dipak\",\n\t\"lastName\": \"Bista\",\n\t\"username\": \"dipakbista@gmail.com\",\n\t\"password\": \"Test@123#\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/users/signup",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"users",
+								"signup"
+							]
+						},
+						"description": "A request used to create a new user account. In order to create an account, a user must supply:\n- a first name that has at least 2 non-whitespace characters.\n- a last name that has at least 2 non-whitespace characters.\n- a valid email address as his/her username.\n- a strong password. This app considers a strong password to be one that is at least 8 characters long and has at least one lowercase letter, one uppercase letter, one number and one symbol/special character.\n\nIf this request is successful, its response will contain a token which must be used when interacting with the endpoints of this app that require authentication e.g the one for creating a book."
+					},
+					"response": []
+				},
+				{
+					"name": "Log in.",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "secret",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"dipakbista\",\n\t\"password\": \"Test@123#\"\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}}/users/login",
+							"host": [
+								"{{BaseURL}}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						},
+						"description": "A request for logging into this app. If this request is successful, its response will contain a token that must be used when interacting with the endpoints of this app that require authentication e.g the one for creating a book."
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch my books.",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-book-store-authentication",
+								"value": "<JWT_TOKEN>",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/users/mybooks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"mybooks"
+							]
+						},
+						"description": "Fetch all the books created by the user making the request. This user is identified from the authentication token sent with the request."
+					},
+					"response": []
+				}
+			],
+			"description": "Requests that are specific to the accounts of users e.g sign up, log in etc.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Add a new book.",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "secret",
+									"value": "{{Token}}",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-book-store-authentication",
+								"type": "text",
+								"value": "{{Token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n\n    {\n\t\"title\": \"Migical Mind\",\n\t\"author\": \"Rahul Shrestha\",\n\t\"publicationDate\": \"2018-01-25\",\n\t\"genres\": [\"Fictional\"],\n\t\"isPrivate\": true\n},\n{\n    \"title\": \"HowtoWin Friends\",\n\t\"author\": \"Dale\",\n\t\"publicationDate\": \"2012-04-18\",\n\t\"genres\": [\"Non-Fictional\"],\n\t\"isPrivate\": false\n},\n{\n    \"title\": \"Stive Jobs\",\n\t\"author\": \"Test\",\n\t\"publicationDate\": \"2015-04-17\",\n\t\"genres\": [\"Non-Fictional\"],\n\t\"isPrivate\": false\n}\n\n\n]\n"
+						},
+						"url": {
+							"raw": "{{BaseURL}}books/",
+							"host": [
+								"{{BaseURL}}books"
+							],
+							"path": [
+								""
+							]
+						},
+						"description": "A request for adding a new book. The body of the request should have these fields:\n- title [required]: the title of the book. The title must have 2 or more non-whitespace characters.\n- author [required]: the name of the author of the book. That name must have 2 or more non-whitespace characters.\n- publicationDate [required]: the date when the book was published. This must be a valid date in the ISO8601 format e.g 2018-01-22\n- genres [optional]: a list of the genres that the book belongs to. Default value is [].\n- isPrivate [optional]: a Boolean value to state whether or not the book is private to the user that added it or it should be public. All new books are private by default."
+					},
+					"response": []
+				},
+				{
+					"name": "Get all books.",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "secret",
+									"value": "{{Token}}",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-book-store-authentication",
+								"type": "text",
+								"value": "<JWT_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/books/",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"books",
+								""
+							]
+						},
+						"description": "Get all the books in the app that are either marked as public books or which belong to you."
+					},
+					"response": []
+				},
+				{
+					"name": "Get a particular book.",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "secret",
+									"value": "{{Token}}",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-book-store-authentication",
+								"type": "text",
+								"value": "<JWT_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/books/1",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"books",
+								"1"
+							]
+						},
+						"description": "Get a specific book, identified by its ID. The book will only be returned if you own it or its owner has marked it as a public book. You must supply the book's ID in the request URL's path."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit a book.",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-book-store-authentication",
+								"type": "text",
+								"value": "<JWT_TOKEN>"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"How to Win Friends\",\n\t\"author\": \"Dale Carnegie\",\n\t\"publicationDate\": \"2012-04-18\",\n\t\"genres\": [\"Non-Fictional\"],\n\t\"isPrivate\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/books/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"9"
+							]
+						},
+						"description": "Update the details of a book. You can only perform this action if you are the owner of the book. You must also supply the book's ID in the request URL's path. You may update the book's title, author, publication date, genres or privacy."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a book.",
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "secret",
+									"value": "{{Token}}",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-book-store-authentication",
+								"type": "text",
+								"value": "<JWT_TOKEN>"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Stive Jobs\",\n\t\"author\": \"Test\",\n\t\"publicationDate\": \"2015-04-17\",\n\t\"genres\": [\"Non-Fictional\"],\n\t\"isPrivate\": false\n}"
+						},
+						"url": {
+							"raw": "{{BaseURL}}/books/3",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"books",
+								"3"
+							]
+						},
+						"description": "Delete a book identified by its ID. However, you can only perform this action if you are the owner of the book. You must supply the book's ID in the request URL's path."
+					},
+					"response": []
+				}
+			],
+			"description": "A collection of requests for managing and/or viewing the books stored in the app."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "x-book-store-authentication",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
